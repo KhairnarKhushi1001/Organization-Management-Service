@@ -48,3 +48,39 @@ exports.getOrganization = async (req, res) => {
 
   res.json(org);
 };
+
+
+// controllers/organizationController.js
+
+// Update organization
+exports.updateOrganization = async (req, res) => {
+  try {
+    const { id } = req.params;
+
+    const updatedOrg = await Organization.findByIdAndUpdate(
+      id,
+      req.body,
+      { new: true } // return updated document
+    );
+
+    if (!updatedOrg) {
+      return res.status(404).json({
+        success: false,
+        message: "Organization not found"
+      });
+    }
+
+    res.status(200).json({
+      success: true,
+      message: "Organization updated successfully",
+      data: updatedOrg
+    });
+
+  } catch (error) {
+    res.status(500).json({
+      success: false,
+      message: "Error updating organization",
+      error: error.message
+    });
+  }
+};
